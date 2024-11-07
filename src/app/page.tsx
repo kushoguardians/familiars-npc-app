@@ -1,101 +1,47 @@
-import Image from "next/image";
+'use client'
+
+import Link from 'next/link'
+import {Button} from '@/components/ui/button'
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const familiars = [
+    { id: 'duwende', name: 'Duwende', imageUrl: '/images/duwende.webp' },
+    { id: 'adarna', name: 'Adarna', imageUrl: '/images/adarna.webp' },
+    { id: 'sundo', name: 'Sundo', imageUrl: '/images/sundo.webp' },
+    { id: 'diwata', name: 'Diwata', imageUrl: '/images/diwata.webp' },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  return (
+    <div className="flex min-h-screen flex-col items-center bg-gradient-to-b from-gray-900 via-black to-gray-900 p-8 text-white">
+      <header className="my-10 text-center">
+        <h1 className="mb-4 text-5xl font-bold text-indigo-300">Familiars Guardians</h1>
+        <p className="text-lg text-gray-400">Embark on a journey to save the Kusho World!</p>
+      </header>
+
+      <div className="grid w-full max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2">
+        {familiars.map((familiar) => (
+          <Link href={`/npc/${familiar.id}`} key={familiar.name}>
+            <div className="transform overflow-hidden rounded-lg bg-gray-800 shadow-lg transition duration-300 hover:scale-105 hover:bg-gray-700">
+              <img
+                src={familiar.imageUrl}
+                alt={familiar.name}
+                className="h-48 w-full object-cover opacity-80 transition duration-300 hover:opacity-100"
+              />
+              <div className="p-4">
+                <h2 className="mb-2 text-2xl font-semibold text-indigo-200">{familiar.name}</h2>
+                <p className="text-sm text-gray-400">
+                  Learn more about the mysterious {familiar.name}.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full justify-center border-indigo-500 text-indigo-300 hover:border-indigo-300 hover:text-indigo-100">
+                  Discover {familiar.name}
+                </Button>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
-  );
+  )
 }
