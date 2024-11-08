@@ -65,7 +65,7 @@ export async function POST(request: Request) {
   try {
     const response = await openai.chat.completions.create({
       temperature: 1.5,
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini-2024-07-18',
       messages: [systemPrompt, {role: 'user', content: prompt}],
       stream: false,
     })
