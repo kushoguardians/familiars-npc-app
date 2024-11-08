@@ -2,14 +2,17 @@
 
 import Link from 'next/link'
 import {Button} from '@/components/ui/button'
+import {useFamiliarStore} from '@/lib/store'
 
 export default function Home() {
-  const familiars = [
-    { id: 'duwende', name: 'Duwende', imageUrl: '/images/duwende.webp' },
-    { id: 'adarna', name: 'Adarna', imageUrl: '/images/adarna.webp' },
-    { id: 'sundo', name: 'Sundo', imageUrl: '/images/sundo.webp' },
-    { id: 'diwata', name: 'Diwata', imageUrl: '/images/diwata.webp' },
-  ];
+  // const familiars = [
+  //   { name: 'Duwende', imageUrl: '/images/duwende.webp' },
+  //   { name: 'Adarna', imageUrl: '/images/adarna.webp' },
+  //   { name: 'Sundo', imageUrl: '/images/sundo.webp' },
+  //   { name: 'Diwata', imageUrl: '/images/diwata.webp' },
+  // ];
+
+  const familiars = useFamiliarStore().familiars
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-gradient-to-b from-gray-900 via-black to-gray-900 p-8 text-white">

@@ -1,6 +1,9 @@
 'use client'
 
 import {notFound, useParams} from 'next/navigation'
+import ChatInterface from '@/components/ChatInterface'
+import {useFamiliarStore} from '@/lib/store'
+import {useEffect, useState} from 'react'
 
 type FamiliarType = 'duwende' | 'adarna' | 'sundo' | 'diwata'
 
@@ -12,58 +15,8 @@ const FamiliarProfile = () => {
   const params = useParams<{familiar: string}>()
   const familiarName = params.familiar as FamiliarType
 
-  const npcData = [
-    {
-      id: 'duwende',
-      name: 'Duwende',
-      health: 100,
-      food: 5,
-      coins: 5,
-      karmicEnergy: 0,
-      location: 'Home',
-      story:
-        'A quiet and enigmatic presence, Duwende emerges from the shadowed groves and hidden caves of Kusho World. Known as the guardian of hidden treasures, Duwende protects the essence of the earth, moving with unparalleled stealth and wisdom. Duwende is deeply connected to the land and senses disturbances in the karmic flow instinctively. On their quest, they gather energy with resilience and caution, compelled by an ancient duty to preserve harmony and stability.',
-      imageUrl: '/images/duwende.webp',
-    },
-    {
-      id: 'adarna',
-      name: 'Adarna',
-      health: 100,
-      food: 5,
-      coins: 5,
-      karmicEnergy: 0,
-      location: 'Home',
-      story:
-        'The mystical Adarna is a radiant bird of ethereal beauty, with feathers that shimmer in hues of twilight and dawn. Legends say its songs heal the soul and protect the lands from darkness. Adarna’s purpose is to gather karmic energy and restore vitality to Kusho’s fading balance. As a protector, Adarna moves with grace and strength, blessing those who encounter it with courage and guiding its fellow familiars through moments of crisis.',
-      imageUrl: '/images/adarna.webp',
-    },
-    {
-      id: 'sundo',
-      name: 'Sundo',
-      health: 100,
-      food: 5,
-      coins: 5,
-      karmicEnergy: 0,
-      location: 'Home',
-      story:
-        'Gentle yet powerful, Sundo is known as the soul-guide, a figure who aids in transitions and protects Kusho’s wayward spirits. Sundo’s abilities are rooted in compassion and understanding, making them a trusted figure in the familiar ranks. They bear the weight of Kusho’s troubles with calm resolve, guiding lost energies back toward harmony. Their presence is essential in the quest to maintain balance, as Sundo understands both the seen and unseen forces affecting Kusho.',
-      imageUrl: '/images/sundo.webp',
-    },
-    {
-      id: 'diwata',
-      name: 'Diwata',
-      health: 100,
-      food: 5,
-      coins: 5,
-      karmicEnergy: 0,
-      location: 'Home',
-      story:
-        'Graceful and attuned to nature, Diwata is a spirit of the forests, waters, and winds. Revered as a healer, Diwata embodies the natural elements, drawing strength from the world around them. They work to cleanse the karmic disruptions, restoring peace and helping other familiars withstand Kusho’s shifts. With a spirit as boundless as the sky, Diwata is deeply dedicated to their mission, acting as a bridge between the familiar world and the natural forces that sustain it.',
-      imageUrl: '/images/diwata.webp',
-    },
-  ];
-
-  const npc = npcData.find(x => x.id === familiarName);
+  // Zustand selector for the specific familiar, with reactivity to changes
+  const npc = useFamiliarStore((state: any) => state.getFamiliar(familiarName))
 
   if (!npc) return notFound()
   console.log('@@@ NPC:', npc)
@@ -94,7 +47,7 @@ const FamiliarProfile = () => {
         {/* Right side: Familiar details and Chat interface */}
         <div className="flex flex-col justify-between md:w-3/4">
           <div>
-            <h1>Chat here with the familiar</h1>
+            <ChatInterface familiar={npc} />
           </div>
         </div>
       </div>
