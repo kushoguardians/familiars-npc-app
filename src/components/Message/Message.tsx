@@ -2,13 +2,15 @@ import {cn} from '@/lib/utils'
 
 export type TMessage = {
   id: string
+  from: string,
+  to: string,
   text: string
   createdAt: Date
-  creator: 'USER' | 'AI'
+  type: string
 }
 
 type MessageProps = {
-  sender: 'USER' | 'AI'
+  sender: string
   children: React.ReactNode
 }
 

@@ -3,7 +3,7 @@ import {ChatCompletionMessageParam} from 'openai/resources/index.mjs'
 import {z} from 'zod'
 
 import {openai} from '@/lib/openai'
-import {availableFunctions} from '@/lib/actions'
+import {availableFunctions, getHumanReadableAction} from '@/lib/actions'
 
 interface FamiliarData {
   name: String
@@ -74,6 +74,9 @@ export async function POST(request: Request) {
     actionToTake =
       availableFunctions.find((f) => aiResponse.includes(f.actionToTake))?.actionToTake || ''
     console.log(aiResponse)
+    if (aiResponse.includes(actionToTake)) {
+      aiResponse = getHumanReadableAction(actionToTake);
+    }
     // Return both the AI response and actionToTake
     return new NextResponse(JSON.stringify({actionToTake, aiResponse}), {
       headers: {'Content-Type': 'application/json'},
