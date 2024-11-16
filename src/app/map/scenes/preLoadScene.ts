@@ -4,11 +4,29 @@ export default class PreloadScene extends Phaser.Scene {
     }
   
     preload() {
-        this.load.image('area', 'assets/area.png')
-        this.load.image('home', 'assets/home.png')
-        this.load.image('market', 'assets/market.png')
-        this.load.image('tower', 'assets/tower.png')
-        this.load.image('wellspring', 'assets/wellspring.png')
+        this.load.image('area', 'assets/area.png');
+        this.load.image('home', 'assets/home.png');
+        this.load.image('market', 'assets/market.png');
+        this.load.image('tower', 'assets/tower.png');
+        this.load.image('wellspring', 'assets/wellspring.png');
+
+        this.load.image('adarna_float_1', 'assets/familiars/adarna_float_1.png');
+        this.load.image('adarna_float_2', 'assets/familiars/adarna_float_2.png');
+        this.load.image('adarna_float_3', 'assets/familiars/adarna_float_3.png');
+        this.load.image('adarna_float_4', 'assets/familiars/adarna_float_4.png');
+        this.load.image('diwata_float_1', 'assets/familiars/diwata_float_1.png');
+        this.load.image('diwata_float_2', 'assets/familiars/diwata_float_2.png');
+        this.load.image('diwata_float_3', 'assets/familiars/diwata_float_3.png');
+        this.load.image('diwata_float_4', 'assets/familiars/diwata_float_4.png');
+        this.load.image('duwende_float_1', 'assets/familiars/duwende_float_1.png');
+        this.load.image('duwende_float_2', 'assets/familiars/duwende_float_2.png');
+        this.load.image('duwende_float_3', 'assets/familiars/duwende_float_3.png');
+        this.load.image('duwende_float_4', 'assets/familiars/duwende_float_4.png');
+        this.load.image('sundo_float_1', 'assets/familiars/sundo_float_1.png');
+        this.load.image('sundo_float_2', 'assets/familiars/sundo_float_2.png');
+        this.load.image('sundo_float_3', 'assets/familiars/sundo_float_3.png');
+        this.load.image('sundo_float_4', 'assets/familiars/sundo_float_4.png');
+
     }
   
     create() {
