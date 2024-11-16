@@ -28,6 +28,7 @@ const ChatInput = ({onChange, value, onSubmit, disabled}: Props) => {
             value={value}
             autoFocus
             rows={value.split(`\n`)?.length || 1}
+            disabled={disabled}
             onChange={onChange}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {

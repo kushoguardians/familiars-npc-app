@@ -56,3 +56,19 @@ export const availableFunctions = [
     arguments: [],
   },
 ]
+
+export const getHumanReadableAction = (actionToTake: string) => {
+  const actionTemplates: any = {
+    goToGatheringArea: "Okay. I'm going now to the gathering area to collect some karmic energies.",
+    goToHome: "I'm heading back home to rest and recuperate.",
+    goToKarmicTower: "I'm on my way to the Karmic Tower to gather some karmic energy.",
+    deposit5KarmicEnergy: "I'm going to the Karmic Wellspring to exchange 5 karmic energy for 3 coins and 3 food.",
+    deposit10KarmicEnergy: "I'm heading to the Karmic Wellspring to trade 10 karmic energy for 9 coins and 9 food.",
+    deposit20KarmicEnergy: "I'm visiting the Karmic Wellspring to exchange 20 karmic energy for 19 coins and 19 food.",
+    buyTreasureBox: "I'm off to the Marketplace to buy a treasure box for 5 coins. Let's see what I get!",
+    buyFood: "I'm going to the Marketplace to buy some food to replenish my resources.",
+  };
+
+  // Fallback if the action is not explicitly mapped
+  return actionTemplates[actionToTake] || `I'll try my best to succeed in restoring the Kusho World!`;
+}

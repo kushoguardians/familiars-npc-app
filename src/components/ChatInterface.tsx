@@ -1,20 +1,49 @@
 'use client'
 
-import {Trash} from 'lucide-react'
 import {FormEvent, useEffect, useState} from 'react'
+// import { ethers } from 'ethers'
 
 import Chat from '@/components/Chat'
 import {Separator} from '@/components/ui/separator'
 import {FamiliarData, useFamiliarStore, useMessages} from '@/lib/store'
 
 const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
-  const {messages, setMessages, clearMessages} = useMessages()
+  const {messages, setMessages, sendMessage, clearMessages} = useMessages()
 
   // Input, loading, and completion state
   const [input, setInput] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [completion, setCompletion] = useState<string>('')
+  const [walletAddress, setWalletAddress] = useState<string>('')
   const {updateFamiliar} = useFamiliarStore()
+
+  // MetaMask connection logic
+  const connectMetaMask = async () => {
+    try {
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!')
+        return
+      }
+      // const provider = new ethers.BrowserProvider(window.ethereum);
+      // Request access to the user's MetaMask accounts
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      // Get the connected Ethereum address
+      const address = accounts[0];
+      // const signer = provider.getSigner()
+      setWalletAddress(address)
+    } catch (error) {
+      console.error('Error connecting MetaMask:', error)
+    }
+  }
+
+  const disconnectWallet = () => {
+    setWalletAddress('') // Clear wallet address state
+  }
+
+  const formatAddress = (address: string) =>
+    `${address.slice(0, 4)}...${address.slice(-4)}`
 
   const fetchCompletion = async () => {
     try {
@@ -156,35 +185,57 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!input) return
-
-    setMessages('USER', input)
+    
+    // setMessages(walletAddress, familiar.address, input, 'USER' )
+    sendMessage(walletAddress, familiar.address, input, 'USER');
     await fetchCompletion()
     setInput('')
   }
 
   useEffect(() => {
     if (!completion || isLoading) return
-    setMessages('AI', completion)
+    sendMessage(familiar.address, walletAddress, completion, 'AI');
   }, [completion, isLoading, setMessages])
+
+  useEffect(() => {
+    setMessages(walletAddress, familiar.address);
+  }, [walletAddress])
+
+  useEffect(() => {
+    clearMessages();
+  }, [])
 
   return (
     <div className="z-10 flex h-screen flex-col gap-5 p-5">
       <header className="flex items-center justify-between border-b">
-        <h1 className="text-xl font-bold">Chat with {familiar.name} </h1>
+        <span className="text-xl">Chat with {familiar.name}</span>
+        <div className="flex flex-col items-end">
+          {walletAddress ? (
+            <div className="text-sm">
+              <span>{formatAddress(walletAddress)}</span>
+              <button
+                className="mt-1 ml-1 rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600"
+                onClick={disconnectWallet}>
+                Disconnect
+              </button>
+            </div>
+          ) : (
+            <button
+              className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
+              onClick={connectMetaMask}>
+              Connect Wallet
+            </button>
+          )}
+        </div>
       </header>
-      <Chat messages={messages} />
+      <Chat messages={messages} familiar={familiar}/>
       <Separator />
       <Chat.Input
         onChange={(e) => setInput(e.target.value)}
         value={input}
         onSubmit={onSubmit}
-        disabled={isLoading}
+        disabled={isLoading || (walletAddress === '')}
       />
-      <div
-        className="flex cursor-pointer items-center gap-2 text-xs text-red-500"
-        onClick={clearMessages}>
-        <Trash className="h-4 w-4" /> Clear Chat
-      </div>
     </div>
   )
 }
