@@ -9,6 +9,15 @@ export default class Familiar extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         this.setScale(0.35)
         this.anims.play(`${base}_idle`);
+
+        this.setInteractive({
+            hitArea: new Phaser.Geom.Rectangle(0, 0, this.width, this.height),
+            hitAreaCallback: Phaser.Geom.Rectangle.Contains
+        });
+
+        this.on("pointerdown", () => {
+            window.location.href = window.location.origin + "/npc/" + base;
+        })
     }
 
     goTo(location:String) {
