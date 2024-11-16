@@ -4,10 +4,10 @@ export type NPCEquipItems = {
 }
 
 export type NPCStats = {
-  0: number
-  1: string
-  2: bigint
-  3: bigint
-  4: bigint
-  5: NPCEquipItems
+  health: number
+  location: string
+  coins: bigint
+  karmic: bigint
+  food: bigint
+  equipments: NPCEquipItems
 }

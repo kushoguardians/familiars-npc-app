@@ -13,7 +13,7 @@ interface OperatorContractType {
 
 const publicClient = createPublicClient({
   chain: baseSepolia,
-  transport: http(),
+  transport: http(process.env.BASE_RPC),
 })
 
 const OperatorContract: OperatorContractType = {
@@ -58,7 +58,16 @@ export async function POST(request: Request) {
     const validResults = results
       .map((result, index) => {
         if (result.status === 'success') {
-          const serializedStats = serializeBigInt(result.result as NPCStats)
+          let serializedStats = serializeBigInt(result.result as NPCStats)
+          serializedStats = {
+            health: serializedStats['0'],
+            location: serializedStats['1'],
+            coins: serializedStats['2'],
+            karmic: serializedStats['3'],
+            food: serializedStats['4'],
+            equipments: serializedStats['5'],
+          }
+
           return {
             ...serializedStats,
             name: getNPCName(tokenIds[index]),
