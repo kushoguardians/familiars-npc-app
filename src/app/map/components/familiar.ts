@@ -12,56 +12,46 @@ export default class Familiar extends Phaser.GameObjects.Sprite {
     }
 
     goTo(location:String) {
+        let targetX;
+        let targetY;
         switch(location) {
             case "Karmic Tower":
-                this.scene.tweens.add({
-                    targets: this,
-                    x: this.scene.cameras.main.width * 0.5 + this.xOffset,
-                    y: this.scene.cameras.main.height * 0.5 + this.yOffset,
-                    duration: 500
-                });
+                targetX = this.scene.cameras.main.width * 0.5 + this.xOffset;
+                targetY = this.scene.cameras.main.height * 0.5 + this.yOffset;
                 break;
-            case "Karmic Wellspring":
-                this.scene.tweens.add({
-                    targets: this,
-                    x: this.scene.cameras.main.width * 0.25 + this.xOffset,
-                    y: this.scene.cameras.main.height * 0.75 + this.yOffset,
-                    duration: 500
-                });
+            case "Karmic Wellspring": 
+                targetX = this.scene.cameras.main.width * 0.25 + this.xOffset;
+                targetY = this.scene.cameras.main.height * 0.75 + this.yOffset;
                 break;
             case "Home":
-                this.scene.tweens.add({
-                    targets: this,
-                    x: this.scene.cameras.main.width * 0.75 + this.xOffset,
-                    y: this.scene.cameras.main.height * 0.25 + this.yOffset,
-                    duration: 500
-                });
+                targetX = this.scene.cameras.main.width * 0.75 + this.xOffset;
+                targetY = this.scene.cameras.main.height * 0.25 + this.yOffset;
                 break;
             case "Marketplace":
-                this.scene.tweens.add({
-                    targets: this,
-                    x: this.scene.cameras.main.width * 0.75 + this.xOffset,
-                    y: this.scene.cameras.main.height * 0.75 + this.yOffset,
-                    duration: 500
-                });
+                targetX = this.scene.cameras.main.width * 0.75 + this.xOffset;
+                targetY = this.scene.cameras.main.height * 0.75 + this.yOffset;
                 break;
             case "Gathering Area":
-                this.scene.tweens.add({
-                    targets: this,
-                    x: this.scene.cameras.main.width * 0.25 + this.xOffset,
-                    y: this.scene.cameras.main.height * 0.25 + this.yOffset,
-                    duration: 500
-                });
+                targetX = this.scene.cameras.main.width * 0.25 + this.xOffset;
+                targetY = this.scene.cameras.main.height * 0.25 + this.yOffset;
                 break;
             default:
-                this.scene.tweens.add({
-                    targets: this,
-                    x: this.scene.cameras.main.width * 0.5 + this.xOffset,
-                    y: this.scene.cameras.main.height * 0.5 + this.yOffset,
-                    duration: 500
-                });
+                targetX = this.scene.cameras.main.width * 0.5 + this.xOffset;
+                targetY = this.scene.cameras.main.height * 0.5 + this.yOffset;
                 break;
         }
+        if(this.x < targetX) {
+            this.anims.play(`${this.base}_walk_right`);
+        } else {
+            this.anims.play(`${this.base}_walk_left`);
+        }
+        this.scene.tweens.add({
+            targets: this,
+            x: targetX,
+            y: targetY,
+            duration: 500
+        });
+        setTimeout(() => this.anims.play(`${this.base}_idle`), 500);
     }
 
 }

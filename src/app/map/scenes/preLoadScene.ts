@@ -26,6 +26,23 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('sundo_float_2', 'assets/familiars/sundo_float_2.png');
         this.load.image('sundo_float_3', 'assets/familiars/sundo_float_3.png');
         this.load.image('sundo_float_4', 'assets/familiars/sundo_float_4.png');
+        
+        this.load.image('adarna_walk_left_1', 'assets/familiars/adarna_walk_left_1.png');
+        this.load.image('adarna_walk_left_2', 'assets/familiars/adarna_walk_left_2.png');
+        this.load.image('adarna_walk_right_1', 'assets/familiars/adarna_walk_right_1.png');
+        this.load.image('adarna_walk_right_2', 'assets/familiars/adarna_walk_right_2.png');
+        this.load.image('diwata_walk_left_1', 'assets/familiars/diwata_walk_left_1.png');
+        this.load.image('diwata_walk_left_2', 'assets/familiars/diwata_walk_left_2.png');
+        this.load.image('diwata_walk_right_1', 'assets/familiars/diwata_walk_right_1.png');
+        this.load.image('diwata_walk_right_2', 'assets/familiars/diwata_walk_right_2.png');
+        this.load.image('duwende_walk_left_1', 'assets/familiars/duwende_walk_left_1.png');
+        this.load.image('duwende_walk_left_2', 'assets/familiars/duwende_walk_left_2.png');
+        this.load.image('duwende_walk_right_1', 'assets/familiars/duwende_walk_right_1.png');
+        this.load.image('duwende_walk_right_2', 'assets/familiars/duwende_walk_right_2.png');
+        this.load.image('sundo_walk_left_1', 'assets/familiars/sundo_walk_left_1.png');
+        this.load.image('sundo_walk_left_2', 'assets/familiars/sundo_walk_left_2.png');
+        this.load.image('sundo_walk_right_1', 'assets/familiars/sundo_walk_right_1.png');
+        this.load.image('sundo_walk_right_2', 'assets/familiars/sundo_walk_right_2.png');
 
     }
   
