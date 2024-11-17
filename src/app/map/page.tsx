@@ -7,12 +7,15 @@ import {EventBus} from "./EventBus";
 
 export default function Page() {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const duwendeLoc = useFamiliarStore((state: any) => state.getFamiliar("duwende").location)
-    const adarnaLoc = useFamiliarStore((state: any) => state.getFamiliar("adarna").location)
-    const sundoLoc = useFamiliarStore((state: any) => state.getFamiliar("sundo").location)
-    const diwataLoc = useFamiliarStore((state: any) => state.getFamiliar("diwata").location)
+    
+    
     const {updateFamiliar} = useFamiliarStore()
-
+    const setFamiliars = useFamiliarStore((state: any) => state.setFamiliars);
+    const familiars = useFamiliarStore((state:any) => state.familiars)
+    const duwendeLoc = useFamiliarStore((state: any) => state.getFamiliar("duwende")?.location)
+    const adarnaLoc = useFamiliarStore((state: any) => state.getFamiliar("adarna")?.location)
+    const sundoLoc = useFamiliarStore((state: any) => state.getFamiliar("sundo")?.location)
+    const diwataLoc = useFamiliarStore((state: any) => state.getFamiliar("diwata")?.location)
     const game = useRef<Phaser.Game | null>(null!);
 
     useEffect(() => {
@@ -30,6 +33,12 @@ export default function Page() {
     useEffect(() => {
         EventBus.emit("changeLoc", {"familiar": "adarna", "location": adarnaLoc})
     }, [adarnaLoc])
+
+    useEffect(() => {
+        if(familiars.length == 0) {
+            setFamiliars()
+        }
+    }, [familiars])
 
     useEffect(() => {
         game.current = StartGame();
