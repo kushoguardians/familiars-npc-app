@@ -4,17 +4,7 @@ import {z} from 'zod'
 
 import {openai} from '@/lib/openai'
 import {availableFunctions, getHumanReadableAction} from '@/lib/actions'
-
-interface FamiliarData {
-  name: String
-  health: number
-  food: number
-  coins: number
-  karmicEnergy: number
-  location: string
-  story: string
-  imageUrl: string
-}
+import {FamiliarData} from '@/lib/store'
 
 const generateSystemPrompt = (familiar: FamiliarData): ChatCompletionMessageParam => {
   // const content = `You are a philippine mythical creature known as Sundo. You can say baybayin words or filipino words too. You are a gentle guide of misguided souls.`
@@ -46,6 +36,7 @@ export async function POST(request: Request) {
   const bodySchema = z.object({
     prompt: z.string(),
     familiar: z.object({
+      id: z.string(),
       name: z.string(),
       health: z.number(),
       food: z.number(),
@@ -54,6 +45,8 @@ export async function POST(request: Request) {
       location: z.string(),
       story: z.string(),
       imageUrl: z.string(),
+      address: z.string(),
+      tokenId: z.number(),
     }),
   })
 
@@ -74,8 +67,8 @@ export async function POST(request: Request) {
     actionToTake =
       availableFunctions.find((f) => aiResponse.includes(f.actionToTake))?.actionToTake || ''
     console.log(aiResponse)
-    if (aiResponse.includes(actionToTake)) {
-      aiResponse = getHumanReadableAction(actionToTake);
+    if (actionToTake !== '' && aiResponse.includes(actionToTake)) {
+      aiResponse = getHumanReadableAction(actionToTake, aiResponse)
     }
     // Return both the AI response and actionToTake
     return new NextResponse(JSON.stringify({actionToTake, aiResponse}), {

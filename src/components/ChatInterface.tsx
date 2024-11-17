@@ -27,10 +27,10 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
       // const provider = new ethers.BrowserProvider(window.ethereum);
       // Request access to the user's MetaMask accounts
       const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
+        method: 'eth_requestAccounts',
+      })
       // Get the connected Ethereum address
-      const address = accounts[0];
+      const address = accounts[0]
       // const signer = provider.getSigner()
       setWalletAddress(address)
     } catch (error) {
@@ -42,14 +42,12 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
     setWalletAddress('') // Clear wallet address state
   }
 
-  const formatAddress = (address: string) =>
-    `${address.slice(0, 4)}...${address.slice(-4)}`
+  const formatAddress = (address: string) => `${address.slice(0, 4)}...${address.slice(-4)}`
 
   const fetchCompletion = async () => {
     try {
       setIsLoading(true)
       setCompletion('')
-
       const response = await fetch('/api', {
         method: 'POST',
         headers: {
@@ -64,83 +62,160 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
 
       const result = await response.json()
 
-      if (result.aiResponse) {
-        setCompletion(result.aiResponse)
-      }
-
+      // if (result.aiResponse) {
+      //   setCompletion(result.aiResponse)
+      // }
+      let aiResponse = result.aiResponse
       if (result.actionToTake) {
         // Perform the action based on `actionToTake`
         switch (result.actionToTake) {
-          case 'goToGatheringArea':
+          case 'goToGatheringArea': {
             console.log('Going to the Gathering Area')
+            const data = await fetch('/api/multicall/npc-actions/go-to-location', {
+              method: 'post',
+              body: JSON.stringify({tokenId: familiar.tokenId, locationId: 3}),
+            })
+            const response = await data.json()
+            const stats = response.data.stats
+
             updateFamiliar(familiar.id, {
-              health: familiar.health - 2,
-              karmicEnergy: familiar.karmicEnergy + Math.floor(Math.random() * 2), // Adds 0 or 1 karmic energy
-              location: 'Gathering Area',
+              health: parseInt(stats.health),
+              karmicEnergy: parseInt(stats.karmic),
+              location: stats.location,
             })
             break
+          }
 
           case 'goToHome':
             console.log('Returning Home')
-            if (familiar.food >= 2) {
-              updateFamiliar(familiar.id, {
-                location: 'Home',
-                health: Math.min(100, familiar.health + 2), // Cap health at 100
-                food: familiar.food - 2,
-              })
+            if (familiar.food < 2) {
+              aiResponse = 'I need more food to go Home'
             } else {
-              console.log('Not enough food to go Home')
+              const data = await fetch('/api/multicall/npc-actions/go-to-location', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, locationId: 2}),
+              })
+              const response = await data.json()
+              const stats = response.data.stats
+
+              updateFamiliar(familiar.id, {
+                health: parseInt(stats.health),
+                food: parseInt(stats.food),
+                location: stats.location,
+              })
             }
             break
 
-          case 'goToKarmicTower':
+          case 'goToKarmicTower': {
             console.log('Going to the Karmic Tower')
+
+            if (familiar.food < 2) {
+              aiResponse = "I'm sorry but I don't have enough food to go to the Karmic Tower."
+              break
+            }
+
+            let data = await fetch('/api/multicall/npc-actions/go-to-location', {
+              method: 'post',
+              body: JSON.stringify({tokenId: familiar.tokenId, locationId: 1}),
+            })
+            const response = await data.json()
+            const stats = response.data.stats
+
             updateFamiliar(familiar.id, {
-              location: 'Karmic Tower',
-              karmicEnergy: familiar.karmicEnergy + Math.floor(Math.random() * 3) + 1, // Adds 1-3 karmic energy
-              health: familiar.health - 1,
+              health: parseInt(stats.health),
+              karmicEnergy: parseInt(stats.karmic),
+              location: stats.location,
             })
             break
-
+          }
           case 'deposit5KarmicEnergy':
             console.log('Depositing 5 Karmic Energy at the Karmic Wellspring')
-            if (familiar.karmicEnergy >= 5) {
+            if (familiar.karmicEnergy < 5) {
+              console.log('Not enough karmic energy to deposit')
+              aiResponse = "I don't have enough karmic energy to deposit"
+            } else {
+              const locData = await fetch('/api/multicall/npc-actions/go-to-location', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, locationId: 0}),
+              })
+
+              const locResponse = await locData.json()
+              const locStats = locResponse.data.stats
+
+              const data = await fetch('/api/multicall/npc-actions/exchange-karmic', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, karmicEnergyAmt: 5}),
+              })
+
+              const response = await data.json()
+              const stats = response.data.stats
+
               updateFamiliar(familiar.id, {
                 karmicEnergy: familiar.karmicEnergy - 5,
                 coins: familiar.coins + 3,
                 food: familiar.food + 3,
                 location: 'Karmic Wellspring',
               })
-            } else {
-              console.log('Not enough karmic energy to deposit')
             }
             break
 
           case 'deposit10KarmicEnergy':
             console.log('Depositing 10 Karmic Energy at the Karmic Wellspring')
-            if (familiar.karmicEnergy >= 10) {
+            if (familiar.karmicEnergy < 10) {
+              console.log('Not enough karmic energy to deposit')
+              aiResponse = "I don't have enough karmic energy to deposit"
+            } else {
+              const locData = await fetch('/api/multicall/npc-actions/go-to-location', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, locationId: 0}),
+              })
+
+              const locResponse = await locData.json()
+              const locStats = locResponse.data.stats
+
+              const data = await fetch('/api/multicall/npc-actions/exchange-karmic', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, karmicEnergyAmt: 10}),
+              })
+
+              const response = await data.json()
+              const stats = response.data.stats
+
               updateFamiliar(familiar.id, {
                 karmicEnergy: familiar.karmicEnergy - 10,
                 coins: familiar.coins + 9,
                 food: familiar.food + 9,
                 location: 'Karmic Wellspring',
               })
-            } else {
-              console.log('Not enough karmic energy to deposit')
             }
             break
 
           case 'deposit20KarmicEnergy':
             console.log('Depositing 20 Karmic Energy at the Karmic Wellspring')
-            if (familiar.karmicEnergy >= 20) {
+            if (familiar.karmicEnergy < 20) {
+              aiResponse = "I don't have enough karmic energy to deposit"
+            } else {
+              const locData = await fetch('/api/multicall/npc-actions/go-to-location', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, locationId: 0}),
+              })
+
+              const locResponse = await locData.json()
+              const locStats = locResponse.data.stats
+
+              const data = await fetch('/api/multicall/npc-actions/exchange-karmic', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, karmicEnergyAmt: 20}),
+              })
+
+              const response = await data.json()
+              const stats = response.data.stats
               updateFamiliar(familiar.id, {
                 karmicEnergy: familiar.karmicEnergy - 20,
                 coins: familiar.coins + 19,
                 food: familiar.food + 19,
                 location: 'Karmic Wellspring',
               })
-            } else {
-              console.log('Not enough karmic energy to deposit')
             }
             break
 
@@ -160,20 +235,40 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
 
           case 'buyFood':
             console.log('Buying Food')
-            if (familiar.coins >= 1) {
+            if (familiar.coins < 1) {
+              aiResponse = "I don't have enough coins to buy food"
+            } else {
+              const locData = await fetch('/api/multicall/npc-actions/go-to-location', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, locationId: 4}),
+              })
+
+              const locResponse = await locData.json()
+              const locStats = locResponse.data.stats
+
+              const data = await fetch('/api/multicall/npc-actions/buy-food', {
+                method: 'post',
+                body: JSON.stringify({tokenId: familiar.tokenId, coinsAmt: 1}),
+              })
+
+              const response = await data.json()
+              const stats = response.data.stats
+
               updateFamiliar(familiar.id, {
                 coins: familiar.coins - 1,
                 food: familiar.food + 1,
                 location: 'Marketplace',
               })
-            } else {
-              console.log('Not enough coins to buy food')
             }
             break
 
           default:
             console.log('No valid action')
         }
+      }
+
+      if (result.aiResponse) {
+        setCompletion(aiResponse)
       }
     } catch (error) {
       console.error('Error fetching completion:', error)
@@ -185,24 +280,24 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!input) return
-    
+
     // setMessages(walletAddress, familiar.address, input, 'USER' )
-    sendMessage(walletAddress, familiar.address, input, 'USER');
+    sendMessage(walletAddress, familiar.address, input, 'USER')
     await fetchCompletion()
     setInput('')
   }
 
   useEffect(() => {
     if (!completion || isLoading) return
-    sendMessage(familiar.address, walletAddress, completion, 'AI');
+    sendMessage(familiar.address, walletAddress, completion, 'AI')
   }, [completion, isLoading, setMessages])
 
   useEffect(() => {
-    setMessages(walletAddress, familiar.address);
+    setMessages(walletAddress, familiar.address)
   }, [walletAddress])
 
   useEffect(() => {
-    clearMessages();
+    clearMessages()
   }, [])
 
   return (
@@ -214,7 +309,7 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
             <div className="text-sm">
               <span>{formatAddress(walletAddress)}</span>
               <button
-                className="mt-1 ml-1 rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600"
+                className="ml-1 mt-1 rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600"
                 onClick={disconnectWallet}>
                 Disconnect
               </button>
@@ -228,13 +323,13 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
           )}
         </div>
       </header>
-      <Chat messages={messages} familiar={familiar}/>
+      <Chat messages={messages} familiar={familiar} />
       <Separator />
       <Chat.Input
         onChange={(e) => setInput(e.target.value)}
         value={input}
         onSubmit={onSubmit}
-        disabled={isLoading || (walletAddress === '')}
+        disabled={isLoading || walletAddress === ''}
       />
     </div>
   )
