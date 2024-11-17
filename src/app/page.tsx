@@ -3,16 +3,14 @@
 import Link from 'next/link'
 import {Button} from '@/components/ui/button'
 import {useFamiliarStore} from '@/lib/store'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
-  // const familiars = [
-  //   { name: 'Duwende', imageUrl: '/images/duwende.webp' },
-  //   { name: 'Adarna', imageUrl: '/images/adarna.webp' },
-  //   { name: 'Sundo', imageUrl: '/images/sundo.webp' },
-  //   { name: 'Diwata', imageUrl: '/images/diwata.webp' },
-  // ];
+  const { familiars, setFamiliars } = useFamiliarStore()
 
-  const familiars = useFamiliarStore().familiars
+  useEffect(() => {
+    setFamiliars()
+  }, [setFamiliars])
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-gradient-to-b from-gray-900 via-black to-gray-900 p-8 text-white">
