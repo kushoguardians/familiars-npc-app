@@ -1,18 +1,26 @@
 import {NextResponse} from 'next/server'
-import {ethers} from 'ethers'
+import {ethers, formatEther, getBytes, solidityPackedKeccak256} from 'ethers'
 import operatorAbi from '@/artifacts/operator.abi.json'
-import {OPERATOR_ADDRESS} from '@/constants'
+import {CHAIN_ID, OPERATOR_ADDRESS} from '@/constants'
+import {Abi, createPublicClient, createWalletClient, http} from 'viem'
+import {privateKeyToAccount} from 'viem/accounts'
+import {baseSepolia} from 'viem/chains'
+import {serializeBigInt} from '@/lib/utils/serialized-bigint'
+import {NPCStats} from '@/shared/types'
 
-const providerUrl = process.env.BASE_RPC || ''
 const privateKey = process.env.PRIVATE_KEY || ''
-const operatorContract = OPERATOR_ADDRESS || ''
+const wallet = new ethers.Wallet(privateKey)
+const account = privateKeyToAccount(wallet.privateKey as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: baseSepolia,
+  transport: http(process.env.BASE_RPC),
+})
 
-// Initialize ethers.js provider and wallet
-const provider = new ethers.JsonRpcProvider(providerUrl)
-const wallet = new ethers.Wallet(privateKey, provider)
-
-// Create a contract instance
-const contract = new ethers.Contract(operatorContract, operatorAbi, wallet)
+const publicClient = createPublicClient({
+  chain: baseSepolia,
+  transport: http(process.env.BASE_RPC),
+})
 
 export async function POST(req: Request) {
   try {
@@ -28,40 +36,61 @@ export async function POST(req: Request) {
     }
 
     // Step 1: Fetch the current nonce for the NPC
-    const nonce = await contract.nonce()
-    console.log('Fetched nonce:', nonce.toString())
+    const nonce = await publicClient.readContract({
+      abi: operatorAbi as Abi,
+      address: OPERATOR_ADDRESS,
+      functionName: 'nonce',
+    })
+
+    console.log(nonce)
 
     // Step 2: Create the message hash to be signed
-    const message = ethers.solidityPackedKeccak256(
+    const message = solidityPackedKeccak256(
       ['uint256', 'uint256', 'address'],
-      [nonce, locationId, wallet.address]
+      [nonce, CHAIN_ID, wallet.address]
     )
     console.log('Message hash:', message)
 
     // Step 3: Sign the message
-    const signature = await wallet.signMessage(ethers.getBytes(message))
+    const signature = await wallet.signMessage(getBytes(message))
     console.log('Message signed:', signature)
 
     // Step 4: Write transaction to go to a location
-    const tx = await contract.goToLocation(tokenId, locationId, signature)
-    console.log('Transaction sent:', tx)
+    const tx = await walletClient.writeContract({
+      abi: operatorAbi as Abi,
+      address: OPERATOR_ADDRESS,
+      functionName: 'goToLocation',
+      args: [tokenId, locationId, signature],
+    })
 
-    // Wait for the transaction to be mined
-    const receipt = await tx.wait()
-    console.log('Transaction mined:', receipt)
+    if (tx) {
+      const stats = await publicClient.readContract({
+        abi: operatorAbi as Abi,
+        address: OPERATOR_ADDRESS,
+        functionName: 'getNPCStats',
+        args: [tokenId],
+      })
 
-    // Step 5: Fetch NPC stats
-    const npcStats = await contract.getNPCStats(tokenId)
-    console.log('NPC Stats:', npcStats)
+      let serializedStats = serializeBigInt(stats as NPCStats)
+      serializedStats = {
+        health: serializedStats['0'],
+        location: serializedStats['1'],
+        coins: formatEther(serializedStats['2']),
+        karmic: serializedStats['3'],
+        food: serializedStats['4'],
+        equipments: serializedStats['5'],
+      }
 
-    return NextResponse.json(
-      {
-        transaction: tx.hash,
-        receipt,
-        npcStats,
-      },
-      {status: 200}
-    )
+      return NextResponse.json(
+        {
+          data: {
+            transactionId: tx,
+            stats: serializedStats,
+          },
+        },
+        {status: 200}
+      )
+    }
   } catch (error) {
     console.error('Error in goToLocation API:', error)
     return NextResponse.json(
