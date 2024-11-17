@@ -1,50 +1,25 @@
 import {NextResponse} from 'next/server'
-import {
-  Abi,
-  Address,
-  createPublicClient,
-  createWalletClient,
-  http,
-  toHex,
-  concatHex,
-  keccak256 as solidityPackedKeccak256,
-} from 'viem'
-import {privateKeyToAccount} from 'viem/accounts'
-import {baseSepolia} from 'viem/chains'
+import {ethers} from 'ethers'
+import operatorAbi from '@/artifacts/operator.abi.json'
 import {OPERATOR_ADDRESS} from '@/constants'
-import OperatorAbi from '@/artifacts/operator.abi.json'
 
-interface OperatorContractType {
-  address: Address
-  abi: Abi
-}
+const providerUrl = process.env.BASE_RPC || ''
+const privateKey = process.env.PRIVATE_KEY || ''
+const operatorContract = OPERATOR_ADDRESS || ''
 
-// Initialize public client
-const publicClient = createPublicClient({
-  chain: baseSepolia,
-  transport: http(process.env.BASE_RPC || ''),
-})
+// Initialize ethers.js provider and wallet
+const provider = new ethers.JsonRpcProvider(providerUrl)
+const wallet = new ethers.Wallet(privateKey, provider)
 
-// Initialize wallet client
-const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
-const walletClient = createWalletClient({
-  account,
-  chain: baseSepolia,
-  transport: http(process.env.BASE_RPC || ''),
-})
+// Create a contract instance
+const contract = new ethers.Contract(operatorContract, operatorAbi, wallet)
 
-// Operator contract instance
-const OperatorContract: OperatorContractType = {
-  address: OPERATOR_ADDRESS,
-  abi: OperatorAbi as Abi,
-} as const
-
-// Handler function for the API route
 export async function POST(req: Request) {
   try {
     const body = await req.json()
     const {tokenId, locationId} = body
 
+    // Validate input
     if (typeof tokenId !== 'number' || typeof locationId !== 'number') {
       return NextResponse.json(
         {error: 'Invalid input. tokenId and locationId must be numbers.'},
@@ -52,45 +27,45 @@ export async function POST(req: Request) {
       )
     }
 
-    console.log('Initiating goToLocation...')
-
     // Step 1: Fetch the current nonce for the NPC
-    const nonce: string = (await publicClient.readContract({
-      address: OperatorContract.address,
-      abi: OperatorContract.abi,
-      functionName: 'nonce',
-    })) as unknown as string
-
-    console.log('Fetched nonce:', nonce)
+    const nonce = await contract.nonce()
+    console.log('Fetched nonce:', nonce.toString())
 
     // Step 2: Create the message hash to be signed
-    const message = solidityPackedKeccak256(
-      concatHex([toHex(nonce), toHex(locationId), toHex(account.address)])
+    const message = ethers.solidityPackedKeccak256(
+      ['uint256', 'uint256', 'address'],
+      [nonce, locationId, wallet.address]
     )
-
     console.log('Message hash:', message)
 
     // Step 3: Sign the message
-    const signature = await walletClient.signMessage({message})
-
+    const signature = await wallet.signMessage(ethers.getBytes(message))
     console.log('Message signed:', signature)
 
     // Step 4: Write transaction to go to a location
-    const tx = await walletClient.writeContract({
-      address: OperatorContract.address,
-      abi: OperatorContract.abi,
-      functionName: 'goToLocation',
-      account,
-      args: [tokenId, locationId, signature], // Pass tokenId, locationId, and the signature
-    })
-
+    const tx = await contract.goToLocation(tokenId, locationId, signature)
     console.log('Transaction sent:', tx)
 
-    return NextResponse.json({transaction: tx}, {status: 200})
-  } catch (error) {
-    console.error('Error calling goToLocationNPC:', error)
+    // Wait for the transaction to be mined
+    const receipt = await tx.wait()
+    console.log('Transaction mined:', receipt)
+
+    // Step 5: Fetch NPC stats
+    const npcStats = await contract.getNPCStats(tokenId)
+    console.log('NPC Stats:', npcStats)
+
     return NextResponse.json(
-      {error: 'Failed to execute goToLocationNPC', details: error},
+      {
+        transaction: tx.hash,
+        receipt,
+        npcStats,
+      },
+      {status: 200}
+    )
+  } catch (error) {
+    console.error('Error in goToLocation API:', error)
+    return NextResponse.json(
+      {error: 'Failed to execute goToLocation.', details: error},
       {status: 500}
     )
   }
