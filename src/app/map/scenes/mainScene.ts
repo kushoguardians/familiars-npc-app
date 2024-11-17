@@ -1,5 +1,8 @@
 import Familiar from "../components/familiar";
 import {EventBus} from "../EventBus";
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({weight: "400", subsets: ["latin"]});
 
 export default class MainScene extends Phaser.Scene {
     adarna:Familiar | undefined; sundo:Familiar | undefined; duwende:Familiar | undefined;  diwata:Familiar | undefined; 
@@ -143,18 +146,24 @@ export default class MainScene extends Phaser.Scene {
         let towerName = this.add.image(tower.x, tower.y + tower.height * 0.6, "blank-label").setOrigin(0.5);
         towerName.setInteractive();
         this.add.text(tower.x, tower.y + tower.height * 0.6, "Karmic Tower", {
-            color: "#FFF"
+            color: "#FFF",
+            fontFamily: "Roboto",
+            fontStyle: "bold",
         }).setOrigin(0.5);
         let home = this.add.image(this.cameras.main.width * 0.75, this.cameras.main.height * 0.25, "home").setOrigin(0.5)
         let homeName =this.add.image(home.x, home.y + home.height * 0.5, "blank-label").setOrigin(0.5);
         homeName.setInteractive();
         this.add.text(home.x, home.y + home.height * 0.5, "Home", {
-            color: "#FFF"
+            fontStyle: "bold",
+            color: "#FFF",
+            fontFamily: "Roboto",
         }).setOrigin(0.5);
         let market = this.add.image(this.cameras.main.width * 0.75, this.cameras.main.height * 0.75, "market").setOrigin(0.5)
         let marketName =this.add.image(market.x, market.y + market.height * 0.5, "blank-label").setOrigin(0.5);
         marketName.setInteractive();
         this.add.text(market.x, market.y + market.height * 0.5, "Marketplace", {
+            fontStyle: "bold",
+            fontFamily: "Roboto",
             color: "#FFF"
         }).setOrigin(0.5);
         let wellspring = this.add.image(this.cameras.main.width * 0.25, this.cameras.main.height * 0.75, "wellspring").setOrigin(0.5)
@@ -162,12 +171,16 @@ export default class MainScene extends Phaser.Scene {
         wellspringName.setInteractive();
 
         this.add.text(wellspring.x, wellspring.y + wellspring.height * 0.5, "Karmic Wellspring", {
+            fontStyle: "bold",
+            fontFamily: "Roboto",
             color: "#FFF"
         }).setOrigin(0.5);
         let area = this.add.image(this.cameras.main.width * 0.25, this.cameras.main.height * 0.25, "area").setOrigin(0.5)
         let areaName  =this.add.image(area.x, area.y + area.height * 0.5, "blank-label").setOrigin(0.5);
         areaName.setInteractive();
         this.add.text(area.x, area.y + area.height * 0.5, "Gathering Area", {
+            fontStyle: "bold",
+            fontFamily: "Roboto",
             color: "#FFF"
         }).setOrigin(0.5);
         this.adarna = new Familiar(this, -50, -60, "adarna_float_1", "adarna");
@@ -177,6 +190,7 @@ export default class MainScene extends Phaser.Scene {
 
         let descriptionContainer = this.add.image(this.cameras.main.width * 0.5, this.cameras.main.height * 0.5, "description-box").setVisible(false);
         let descriptionText = this.add.text(descriptionContainer.x, descriptionContainer.y, "Karmic Wellspring", {
+            fontFamily: "Roboto",
             color: "#FFF",
             align: "center",
             fontSize: "16px"

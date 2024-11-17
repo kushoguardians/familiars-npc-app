@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import StartGame from "./main";
 import { useFamiliarStore } from "@/lib/store";
 import {EventBus} from "./EventBus";
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({weight: "400", subsets: ["latin"]});
+
 
 export default function Page() {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });

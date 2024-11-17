@@ -5,10 +5,14 @@ import {Button} from '@/components/ui/button'
 import {useFamiliarStore} from '@/lib/store'
 import {useEffect} from 'react'
 import Image from "next/image";
+import { Roboto } from 'next/font/google'
 
+const roboto = Roboto({weight: "400", subsets: ["latin"]});
+const robotoBold = Roboto({weight: "700", subsets: ["latin"]});
 
 export default function Home() {
   const {familiars, setFamiliars} = useFamiliarStore()
+
 
   useEffect(() => {
     setFamiliars()
@@ -25,7 +29,7 @@ export default function Home() {
             objectFit="contain"
             className="object-cover"
         />
-        <p className="text-white text-xl">Embark on a journey to save the Kusho World!</p>
+        <p className={`text-white text-xl ${roboto.className}`}>Embark on a journey to save the Kusho World!</p>
       </div>
       <Link href={`/familiars`}>
         <button className="relative">
@@ -37,7 +41,7 @@ export default function Home() {
                     objectFit="contain"
                     className="object-cover"
                     />
-                <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-3xl">PLAY</p>
+                <p className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-3xl ${robotoBold.className}`}>PLAY</p>
         </button>
       </Link>
     </div>
