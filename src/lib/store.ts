@@ -117,7 +117,7 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
       const data = await response.json();
       if (response.ok && data) {
         const familiars = data.data.map((familiar: any) => ({
-          id: familiar.name,
+          id: familiar.name.toString().toLowerCase(),
           name: familiar.name,
           health: familiar.health,
           food: familiar.food,
@@ -128,6 +128,7 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
           imageUrl: familiar.imageUrl,
           address: familiar.address
         }));
+        console.log("@@@ familiars", familiars)
         set({ familiars: familiars });
       } else {
         console.error('Failed to get familiar:', data.error);
