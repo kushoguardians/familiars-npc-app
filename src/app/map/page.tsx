@@ -53,25 +53,25 @@ export default function Page() {
             });
           };
 
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if(event.key == "1") {
-                updateFamiliar("diwata", {location: "Karmic Wellspring"})
-            } else if(event.key == "2") {
-                updateFamiliar("diwata", {location: "Home"})
-            } else if(event.key == "3") {
-                updateFamiliar("diwata", {location: "Marketplace"})
-            } else if(event.key == "4") {
-                updateFamiliar("diwata", {location: "Gathering Area"})
-            } else if(event.key == "5") {
-                updateFamiliar("diwata", {location: "Karmic Tower"})
-            }
-        }
+        // const handleKeyDown = (event: KeyboardEvent) => {
+        //     if(event.key == "1") {
+        //         updateFamiliar("diwata", {location: "Karmic Wellspring"})
+        //     } else if(event.key == "2") {
+        //         updateFamiliar("diwata", {location: "Home"})
+        //     } else if(event.key == "3") {
+        //         updateFamiliar("diwata", {location: "Marketplace"})
+        //     } else if(event.key == "4") {
+        //         updateFamiliar("diwata", {location: "Gathering Area"})
+        //     } else if(event.key == "5") {
+        //         updateFamiliar("diwata", {location: "Karmic Tower"})
+        //     }
+        // }
       
-        window.addEventListener('keydown', handleKeyDown);
+        // window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('mousemove', handleMouseMove);
 
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+            // window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
