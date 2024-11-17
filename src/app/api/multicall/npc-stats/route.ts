@@ -1,4 +1,4 @@
-import {Abi, Address, createPublicClient, http} from 'viem'
+import {Abi, Address, createPublicClient, formatEther, http} from 'viem'
 import {baseSepolia} from 'viem/chains'
 import {NextResponse} from 'next/server'
 import OperatorAbi from '@/artifacts/operator.abi.json'
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
           serializedStats = {
             health: serializedStats['0'],
             location: serializedStats['1'],
-            coins: serializedStats['2'],
+            coins: formatEther(serializedStats['2']),
             karmic: serializedStats['3'],
             food: serializedStats['4'],
             equipments: serializedStats['5'],
