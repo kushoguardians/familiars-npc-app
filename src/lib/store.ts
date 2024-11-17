@@ -31,6 +31,7 @@ export interface FamiliarData {
   story: string
   imageUrl: string
   address: string
+  tokenId: number
 }
 
 interface FamiliarStore {
@@ -120,13 +121,14 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
           id: familiar.name.toString().toLowerCase(),
           name: familiar.name,
           health: familiar.health,
-          food: familiar.food,
-          coins: familiar.coins,
-          karmicEnergy: familiar.karmic,
+          food: parseInt(familiar.food),
+          coins: parseInt(familiar.coins),
+          karmicEnergy: parseInt(familiar.karmic),
           location: familiar.location,
           story: familiar.story,
           imageUrl: familiar.imageUrl,
           address: familiar.address,
+          tokenId: familiar.tokenId,
         }))
         set({familiars: familiars})
       } else {
