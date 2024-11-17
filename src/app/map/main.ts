@@ -1,6 +1,7 @@
 import {AUTO, Game} from "phaser";
 import PreloadScene from "./scenes/preLoadScene";
 import MainScene from "./scenes/mainScene";
+import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugin.js';
 
 const config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
@@ -16,7 +17,15 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
         PreloadScene,
         MainScene
-    ]
+    ],
+    plugins: {
+        global: [{
+            key: 'rexWebFontLoader',
+            plugin: WebFontLoaderPlugin,
+            start: true
+        },
+        ]
+    }
 };
 
 const StartGame = () => {

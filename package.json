@@ -24,6 +24,7 @@
     "next": "15.0.2",
     "openai": "^4.69.0",
     "phaser": "^3.86.0",
+    "phaser3-rex-plugins": "^1.80.11",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
     "react-markdown": "^9.0.1",

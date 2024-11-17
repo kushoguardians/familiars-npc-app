@@ -18,6 +18,14 @@ export default class Familiar extends Phaser.GameObjects.Sprite {
         this.on("pointerdown", () => {
             window.location.href = window.location.origin + "/npc/" + base;
         })
+
+        this.on('pointerover', () => {
+            scene.input.setDefaultCursor('pointer');
+        });
+        
+        this.on('pointerout', () => {
+            scene.input.setDefaultCursor('default');
+        });
     }
 
     goTo(location:String) {
