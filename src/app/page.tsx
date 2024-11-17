@@ -4,45 +4,46 @@ import Link from 'next/link'
 import {Button} from '@/components/ui/button'
 import {useFamiliarStore} from '@/lib/store'
 import {useEffect} from 'react'
+import Image from "next/image";
+import { Roboto } from 'next/font/google'
+
+const roboto = Roboto({weight: "400", subsets: ["latin"]});
+const robotoBold = Roboto({weight: "700", subsets: ["latin"]});
 
 export default function Home() {
   const {familiars, setFamiliars} = useFamiliarStore()
+
 
   useEffect(() => {
     setFamiliars()
   }, [setFamiliars])
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gradient-to-b from-gray-900 via-black to-gray-900 p-8 text-white">
-      <header className="my-10 text-center">
-        <h1 className="mb-4 text-5xl font-bold text-indigo-300">Familiars Guardians</h1>
-        <p className="text-lg text-gray-400">Embark on a journey to save the Kusho World!</p>
-      </header>
-
-      <div className="grid w-full max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2">
-        {familiars.map((familiar) => (
-          <Link href={`/npc/${familiar.id}`} key={familiar.name}>
-            <div className="transform overflow-hidden rounded-lg bg-gray-800 shadow-lg transition duration-300 hover:scale-105 hover:bg-gray-700">
-              <img
-                src={familiar.imageUrl}
-                alt={familiar.name}
-                className="h-48 w-full object-cover opacity-80 transition duration-300 hover:opacity-100"
-              />
-              <div className="p-4">
-                <h2 className="mb-2 text-2xl font-semibold text-indigo-200">{familiar.name}</h2>
-                <p className="text-sm text-gray-400">
-                  Learn more about the mysterious {familiar.name}.
-                </p>
-                <Button
-                  variant="outline"
-                  className="mt-4 w-full justify-center border-indigo-500 text-indigo-300 hover:border-indigo-300 hover:text-indigo-100">
-                  Discover {familiar.name}
-                </Button>
-              </div>
-            </div>
-          </Link>
-        ))}
+    <div className="flex min-h-screen flex-col justify-center items-center bg-[url('/assets/BG.png')] bg-cover bg-center p-8 gap-16 text-white">
+      <div className="text-center">
+        <Image
+            src="/assets/logo.png"
+            alt="Logo"
+            width={662}
+            height={265}
+            objectFit="contain"
+            className="object-cover"
+        />
+        <p className={`text-white text-xl ${roboto.className}`}>Embark on a journey to save the Kusho World!</p>
       </div>
+      <Link href={`/familiars`}>
+        <button className="relative">
+                <Image
+                    src="/assets/play.png"
+                    alt="Logo"
+                    width={270}
+                    height={84}
+                    objectFit="contain"
+                    className="object-cover"
+                    />
+                <p className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-3xl ${robotoBold.className}`}>PLAY</p>
+        </button>
+      </Link>
     </div>
   )
 }

@@ -10,6 +10,9 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('tower', 'assets/tower.png');
         this.load.image('wellspring', 'assets/wellspring.png');
 
+        this.load.image("blank-label", 'assets/blank-label.png');
+        this.load.image("description-box", 'assets/description-box.png');
+
         this.load.image('adarna_float_1', 'assets/familiars/adarna_float_1.png');
         this.load.image('adarna_float_2', 'assets/familiars/adarna_float_2.png');
         this.load.image('adarna_float_3', 'assets/familiars/adarna_float_3.png');
@@ -44,12 +47,19 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('sundo_walk_right_1', 'assets/familiars/sundo_walk_right_1.png');
         this.load.image('sundo_walk_right_2', 'assets/familiars/sundo_walk_right_2.png');
 
+        this.load.rexWebFont({
+            google: {
+                families: ['Roboto']
+            },
+        });
+
     }
   
     create() {
         this.add
         .text(this.cameras.main.width * 0.5, this.cameras.main.height * 0.5, ``, {
           color: '#FFFFFF',
+          font:"40px Roboto",
           align: "center",
         })
         .setOrigin(0.5, 0.5).setWordWrapWidth(this.cameras.main.width)
