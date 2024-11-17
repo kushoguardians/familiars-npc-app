@@ -31,7 +31,7 @@ export default function Page() {
               <div className="p-4">
                 <h2 className="mb-2 text-2xl font-semibold text-indigo-200">{familiar.name}</h2>
                 <p className="text-sm text-gray-400">
-                  Learn more about the mysterious {familiar.name}.
+                    {familiar.story.split(".")[0]}.
                 </p>
                 <Button
                   variant="outline"
