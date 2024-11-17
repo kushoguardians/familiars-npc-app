@@ -13,9 +13,9 @@ export default function Page() {
   }, [setFamiliars])
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gradient-to-b from-gray-900 via-black to-gray-900 p-8 text-white">
-      <header className="my-10 text-center">
-        <h1 className="mb-4 text-5xl font-bold text-indigo-300">Familiars Guardians</h1>
+    <div className="flex min-h-screen flex-col items-center bg-[url('/assets/BG.png')] bg-cover bg-center p-8 text-white gap-16">
+      <header className="text-center">
+        <h1 className="mb-4 text-4xl font-bold text-indigo-300">Familiars Guardians</h1>
         <p className="text-lg text-gray-400">Embark on a journey to save the Kusho World!</p>
       </header>
 
