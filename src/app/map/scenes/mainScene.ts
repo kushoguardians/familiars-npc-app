@@ -140,22 +140,27 @@ export default class MainScene extends Phaser.Scene {
         
 
         let tower = this.add.image(this.cameras.main.width * 0.5, this.cameras.main.height * 0.5, "tower").setOrigin(0.5)
+        this.add.image(tower.x, tower.y + tower.height * 0.6, "blank-label").setOrigin(0.5);
         this.add.text(tower.x, tower.y + tower.height * 0.6, "Karmic Tower", {
             color: "#FFF"
         }).setOrigin(0.5);
         let home = this.add.image(this.cameras.main.width * 0.75, this.cameras.main.height * 0.25, "home").setOrigin(0.5)
+        this.add.image(home.x, home.y + home.height * 0.5, "blank-label").setOrigin(0.5);
         this.add.text(home.x, home.y + home.height * 0.5, "Home", {
             color: "#FFF"
         }).setOrigin(0.5);
         let market = this.add.image(this.cameras.main.width * 0.75, this.cameras.main.height * 0.75, "market").setOrigin(0.5)
+        this.add.image(market.x, market.y + market.height * 0.5, "blank-label").setOrigin(0.5);
         this.add.text(market.x, market.y + market.height * 0.5, "Marketplace", {
             color: "#FFF"
         }).setOrigin(0.5);
         let wellspring = this.add.image(this.cameras.main.width * 0.25, this.cameras.main.height * 0.75, "wellspring").setOrigin(0.5)
+        this.add.image(wellspring.x, wellspring.y + wellspring.height * 0.5, "blank-label").setOrigin(0.5);
         this.add.text(wellspring.x, wellspring.y + wellspring.height * 0.5, "Karmic Wellspring", {
             color: "#FFF"
         }).setOrigin(0.5);
         let area = this.add.image(this.cameras.main.width * 0.25, this.cameras.main.height * 0.25, "area").setOrigin(0.5)
+        this.add.image(area.x, area.y + area.height * 0.5, "blank-label").setOrigin(0.5);
         this.add.text(area.x, area.y + area.height * 0.5, "Gathering Area", {
             color: "#FFF"
         }).setOrigin(0.5);
