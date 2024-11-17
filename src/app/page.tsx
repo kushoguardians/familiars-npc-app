@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import {Button} from '@/components/ui/button'
 import {useFamiliarStore} from '@/lib/store'
-import { useEffect, useState } from 'react'
+import {useEffect} from 'react'
 
 export default function Home() {
-  const { familiars, setFamiliars } = useFamiliarStore()
+  const {familiars, setFamiliars} = useFamiliarStore()
 
   useEffect(() => {
     setFamiliars()

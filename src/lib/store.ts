@@ -4,8 +4,8 @@ import {create} from 'zustand'
 
 type Message = {
   id: string
-  from: string,
-  to: string,
+  from: string
+  to: string
   text: string
   createdAt: Date
   type: string
@@ -13,7 +13,7 @@ type Message = {
 
 type MessageState = {
   messages: Message[]
-  setMessages: (from: string, to: string ) => void
+  setMessages: (from: string, to: string) => void
   sendMessage: (from: string, to: string, message: string, type: string) => void
   clearMessages: () => void
 }
@@ -43,13 +43,13 @@ interface FamiliarStore {
 export const useMessages = create<MessageState>((set, get) => ({
   messages: [], // No longer retrieves from storage
   clearMessages: () => {
-    set({ messages: [] });
+    set({messages: []})
   },
-  setMessages: async (from: string, to: string ) => {
-    if (from === '') return;
+  setMessages: async (from: string, to: string) => {
+    if (from === '') return
     try {
-      const response = await fetch(`/api/chat/conversations?from=${from}&to=${to}`);
-      const data = await response.json();
+      const response = await fetch(`/api/chat/conversations?from=${from}&to=${to}`)
+      const data = await response.json()
 
       if (response.ok && data.success) {
         const conversations = data.conversations.map((chat: any) => ({
@@ -59,14 +59,14 @@ export const useMessages = create<MessageState>((set, get) => ({
           text: chat.message,
           createdAt: new Date(chat.createdAt),
           type: chat.type,
-        }));
+        }))
 
-        set({ messages: conversations });
+        set({messages: conversations})
       } else {
-        console.error('Failed to fetch conversations:', data.error);
+        console.error('Failed to fetch conversations:', data.error)
       }
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error('Error fetching messages:', error)
     }
   },
   sendMessage: async (from: string, to: string, text: string, type: string) => {
@@ -74,34 +74,34 @@ export const useMessages = create<MessageState>((set, get) => ({
       // Call the send API
       const response = await fetch(`/api/chat/send`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from, to, message: text, type }),
-      });
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({from, to, message: text, type}),
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok && data.success) {
         const newMessage = {
           id: data.chat._id,
-          from:data.from,
-          to:data.to,
+          from: data.from,
+          to: data.to,
           text: data.chat.message,
           createdAt: new Date(data.chat.timestamp),
           type: data.chat.type,
-        };
+        }
 
         // Update local state with the new message
         set((state) => ({
           messages: [...state.messages, newMessage],
-        }));
+        }))
       } else {
-        console.error('Failed to send message:', data.error);
+        console.error('Failed to send message:', data.error)
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error sending message:', error)
     }
   },
-}));
+}))
 
 export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
   familiars: [],
@@ -114,7 +114,7 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
         method: 'post',
         body: JSON.stringify({tokenIds: [1, 2, 3, 4]}),
       })
-      const data = await response.json();
+      const data = await response.json()
       if (response.ok && data) {
         const familiars = data.data.map((familiar: any) => ({
           id: familiar.name.toString().toLowerCase(),
@@ -126,17 +126,15 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
           location: familiar.location,
           story: familiar.story,
           imageUrl: familiar.imageUrl,
-          address: familiar.address
-        }));
-        console.log("@@@ familiars", familiars)
-        set({ familiars: familiars });
+          address: familiar.address,
+        }))
+        set({familiars: familiars})
       } else {
-        console.error('Failed to get familiar:', data.error);
+        console.error('Failed to get familiar:', data.error)
       }
     } catch (error) {
-      
+      console.error('Failed to call the multicall api', error)
     }
-    
   },
   updateFamiliar: (id: string, updates: Partial<FamiliarData>) => {
     set((state) => ({
