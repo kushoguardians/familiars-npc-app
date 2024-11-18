@@ -1,8 +1,9 @@
 import Familiar from "../components/familiar";
 import {EventBus} from "../EventBus";
-import { Roboto } from "next/font/google";
 
-const roboto = Roboto({weight: "400", subsets: ["latin"]});
+interface CustomGame extends Phaser.Game {
+    locationData: any; // Or specify a more specific type
+}
 
 export default class MainScene extends Phaser.Scene {
     adarna:Familiar | undefined; sundo:Familiar | undefined; duwende:Familiar | undefined;  diwata:Familiar | undefined; 
@@ -15,6 +16,7 @@ export default class MainScene extends Phaser.Scene {
     }
   
     create() {
+        const locationData = (this.game as CustomGame).locationData;
         this.anims.create({
             key:'adarna_idle',
             frames: [
@@ -183,10 +185,10 @@ export default class MainScene extends Phaser.Scene {
             fontFamily: "Roboto",
             color: "#FFF"
         }).setOrigin(0.5);
-        this.adarna = new Familiar(this, -50, -60, "adarna_float_1", "adarna");
-        this.diwata = new Familiar(this, 50, -60, "diwata_float_1", "diwata");
-        this.sundo = new Familiar(this, -50, 20, "sundo_float_1", "sundo");
-        this.duwende = new Familiar(this, 50, 20, "duwende_float_1", "duwende");
+        this.adarna = new Familiar(this, -50, -60, "adarna_float_1", "adarna", locationData.adarna);
+        this.diwata = new Familiar(this, 50, -60, "diwata_float_1", "diwata", locationData.diwata);
+        this.sundo = new Familiar(this, -50, 20, "sundo_float_1", "sundo", locationData.sundo);
+        this.duwende = new Familiar(this, 50, 20, "duwende_float_1", "duwende", locationData.duwende);
 
         let descriptionContainer = this.add.image(this.cameras.main.width * 0.5, this.cameras.main.height * 0.5, "description-box").setVisible(false);
         let descriptionText = this.add.text(descriptionContainer.x, descriptionContainer.y, "Karmic Wellspring", {
