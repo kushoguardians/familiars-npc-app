@@ -1,6 +1,6 @@
 'use client'
 
-import {ArrowLeftIcon, Edit2} from 'lucide-react'
+import {ArrowLeftIcon, Edit2, Trophy} from 'lucide-react'
 import {notFound, useParams} from 'next/navigation'
 import ChatInterface from '@/components/ChatInterface'
 import {FamiliarData, useFamiliarStore} from '@/lib/store'
@@ -45,12 +45,18 @@ const FamiliarProfile = () => {
     <div className="flex min-h-screen flex-col items-center bg-gradient-to-b from-gray-800 via-black to-gray-900 text-white">
       <div className="flex w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-gray-800 shadow-lg md:flex-row">
         <div className="relative md:w-2/5">
-          <button
-            className="absolute left-4 top-4 z-10 rounded bg-indigo-500 px-4 py-1 text-sm font-semibold text-white shadow hover:bg-indigo-600"
-            onClick={() => window.history.back()}>
-            <ArrowLeftIcon />
-          </button>
-
+          <div className="mt-5 flex flex-row justify-between px-4">
+            <button
+              className="z-10 rounded bg-indigo-500 px-4 py-1 text-sm font-semibold text-white shadow hover:bg-indigo-600"
+              onClick={() => window.history.back()}>
+              <ArrowLeftIcon />
+            </button>
+            <Link href="/leaderboard">
+              <button className="z-10 rounded bg-indigo-500 px-4 py-1 text-sm font-semibold text-white shadow hover:bg-indigo-600">
+                <Trophy />
+              </button>
+            </Link>
+          </div>
           {/* Image */}
 
           <div className="relative mx-auto mt-10 h-40 w-40 overflow-hidden rounded-md shadow-md sm:h-48 sm:w-48">
@@ -76,7 +82,7 @@ const FamiliarProfile = () => {
               <span className="font-semibold text-indigo-400">{npc.location}</span> <br />
             </p>
           </div>
-          <div className="relative mx-auto h-52 w-52 cursor-pointer overflow-hidden rounded-md shadow-md sm:h-80 sm:w-80">
+          <div className="relative mx-auto h-44 w-44 cursor-pointer overflow-hidden rounded-md shadow-md sm:h-80 sm:w-80">
             <Link href="/map">
               <img
                 src={`/maps/${npc.location.toLowerCase()}.png`}
@@ -84,7 +90,7 @@ const FamiliarProfile = () => {
                 className="h-full w-full object-cover"
               />
             </Link>
-            <p className="mt-[-20px] text-center text-sm text-gray-400">
+            <p className="mt-[-35px] text-center text-sm text-gray-400">
               Click to see the full map
             </p>
           </div>
