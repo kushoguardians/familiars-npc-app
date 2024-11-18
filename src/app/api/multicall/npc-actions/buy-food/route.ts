@@ -62,8 +62,8 @@ export async function POST(req: Request) {
       functionName: 'buyFoodToMarketplace',
       args: [tokenId, coinsAmt, signature],
     })
-
-    if (tx) {
+    const transaction = await publicClient.waitForTransactionReceipt({hash: tx})
+    if (transaction) {
       const stats = await publicClient.readContract({
         abi: operatorAbi as Abi,
         address: OPERATOR_ADDRESS,
