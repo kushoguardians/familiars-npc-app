@@ -293,7 +293,8 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
   }, [completion, isLoading, setMessages])
 
   useEffect(() => {
-    setMessages(walletAddress, familiar.address)
+    setMessages(walletAddress, familiar.address, familiar.name)
+    console.log('@@@ messages', messages)
   }, [walletAddress])
 
   useEffect(() => {
