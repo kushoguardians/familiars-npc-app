@@ -45,13 +45,22 @@ export default function Page() {
     }, [familiars])
 
     useEffect(() => {
-        game.current = StartGame();
+        game.current = StartGame({
+            adarna: adarnaLoc,
+            sundo: sundoLoc,
+            diwata: diwataLoc,
+            duwende: duwendeLoc
+        });
         const handleMouseMove = (event: MouseEvent) => {
             setMousePosition({
               x: event.clientX,
               y: event.clientY,
             });
           };
+
+          
+        //TODO: Change to listen to goTo events from smartcontract;
+        let interval = setInterval(setFamiliars, 5000);
 
         // const handleKeyDown = (event: KeyboardEvent) => {
         //     if(event.key == "1") {
@@ -73,6 +82,7 @@ export default function Page() {
         return () => {
             // window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('mousemove', handleMouseMove);
+            clearInterval(interval); 
         };
     }, []);
 
