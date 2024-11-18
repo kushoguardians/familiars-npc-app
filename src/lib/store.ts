@@ -1,6 +1,7 @@
 'use client'
 
 import {create} from 'zustand'
+import {getGifFileName} from './utils'
 
 type Message = {
   id: string
@@ -13,7 +14,7 @@ type Message = {
 
 type MessageState = {
   messages: Message[]
-  setMessages: (from: string, to: string) => void
+  setMessages: (from: string, to: string, name: string) => void
   sendMessage: (from: string, to: string, message: string, type: string) => void
   clearMessages: () => void
 }
@@ -32,6 +33,7 @@ export interface FamiliarData {
   imageUrl: string
   address: string
   tokenId: number
+  item: number
 }
 
 interface FamiliarStore {
@@ -46,14 +48,14 @@ export const useMessages = create<MessageState>((set, get) => ({
   clearMessages: () => {
     set({messages: []})
   },
-  setMessages: async (from: string, to: string) => {
+  setMessages: async (from: string, to: string, name: string) => {
     if (from === '') return
     try {
       const response = await fetch(`/api/chat/conversations?from=${from}&to=${to}`)
       const data = await response.json()
 
       if (response.ok && data.success) {
-        const conversations = data.conversations.map((chat: any) => ({
+        const conversations = await data.conversations.map((chat: any) => ({
           id: chat._id,
           from: chat.from,
           to: chat.to,
@@ -61,7 +63,22 @@ export const useMessages = create<MessageState>((set, get) => ({
           createdAt: new Date(chat.createdAt),
           type: chat.type,
         }))
+        console.log('@@@ conversations:', conversations)
+        if (conversations.length === 0) {
+          const welcomeMessage = `Ah, greetings, adventurer! Welcome to the Kusho World, where magic and wonder collide with your destiny. My name is ${name}, and I'm here to guide you.`
+          const welcomeMessage2 =
+            'In this realm, Familiars like me are more than companions; we are partners in adventure, wisdom, and growth. From soaring through the skies with Adarnas to uncovering secrets with cunning Duwendes, the possibilities are as vast as the stars above.'
+          const welcomeMessage3 =
+            'You will care for us, guide us, and even test your mettle in thrilling challenges. Together, we will unlock the mysteries of this enchanting land. Now, step forward and begin your journey!'
+          const welcomeMessage4 = 'Start by connecting your wallet and talk to us!'
+          await get().sendMessage(from, to, welcomeMessage, 'AI')
+          await get().sendMessage(from, to, welcomeMessage2, 'AI')
 
+          await get().sendMessage(from, to, welcomeMessage3, 'AI')
+
+          await get().sendMessage(from, to, welcomeMessage4, 'AI')
+          return
+        }
         set({messages: conversations})
       } else {
         console.error('Failed to fetch conversations:', data.error)
@@ -117,6 +134,7 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
       })
       const data = await response.json()
       if (response.ok && data) {
+        console.log(data.data)
         const familiars = data.data.map((familiar: any) => ({
           id: familiar.name.toString().toLowerCase(),
           name: familiar.name,
@@ -126,9 +144,13 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
           karmicEnergy: parseInt(familiar.karmic),
           location: familiar.location,
           story: familiar.story,
-          imageUrl: familiar.imageUrl,
+          imageUrl:
+            familiar.equipments.head === '0'
+              ? familiar.imageUrl
+              : `/images/${getGifFileName(familiar.name.toString().toLowerCase())}`,
           address: familiar.address,
           tokenId: familiar.tokenId,
+          item: parseInt(familiar.equipments.head),
         }))
         set({familiars: familiars})
       } else {

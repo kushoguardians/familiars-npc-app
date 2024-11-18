@@ -47,6 +47,7 @@ export async function POST(request: Request) {
       imageUrl: z.string(),
       address: z.string(),
       tokenId: z.number(),
+      item: z.number(),
     }),
   })
 
