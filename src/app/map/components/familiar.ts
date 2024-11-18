@@ -1,6 +1,6 @@
 export default class Familiar extends Phaser.GameObjects.Sprite {
     base; scene; xOffset; yOffset;
-    constructor(scene:Phaser.Scene, xOffset:number, yOffset:number, texture:string, base:string) {
+    constructor(scene:Phaser.Scene, xOffset:number, yOffset:number, texture:string, base:string, location:string) {
         super(scene, scene.cameras.main.width * 0.5 + xOffset, scene.cameras.main.height * 0.5 + yOffset, texture)
         this.base = base;
         this.scene = scene;
@@ -26,6 +26,8 @@ export default class Familiar extends Phaser.GameObjects.Sprite {
         this.on('pointerout', () => {
             scene.input.setDefaultCursor('default');
         });
+
+        this.goTo(location);
     }
 
     goTo(location:String) {

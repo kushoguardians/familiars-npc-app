@@ -28,8 +28,14 @@ const config: Phaser.Types.Core.GameConfig = {
     }
 };
 
-const StartGame = () => {
-    return new Game(config);
+const StartGame = (data:any) => {
+    const callbacks =  {
+        preBoot: (game:any) => {
+            // Add custom data to game instance
+            game.locationData = data;
+        }
+    };
+    return new Game({...config, callbacks});
 }
 
 export default StartGame;
