@@ -12,9 +12,13 @@ export function formatDate(date: Date) {
 }
 
 export function toTitleCase(str: String) {
-  return str.toLowerCase().split(' ').map((word: String) => {
-    return (word.charAt(0).toUpperCase() + word.slice(1));
-  }).join(' ');
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map((word: String) => {
+      return word.charAt(0).toUpperCase() + word.slice(1)
+    })
+    .join(' ')
 }
 
 export type CodeBlockChild = {
@@ -53,4 +57,8 @@ export function parseMimeType(mimeType: string) {
     default:
       return mimeType
   }
+}
+
+export function getGifFileName(id: string) {
+  return `${id}-clothes.gif`
 }

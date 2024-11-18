@@ -151,10 +151,10 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
               const stats = response.data.stats
 
               updateFamiliar(familiar.id, {
-                karmicEnergy: familiar.karmicEnergy - 5,
-                coins: familiar.coins + 3,
-                food: familiar.food + 3,
-                location: 'Karmic Wellspring',
+                karmicEnergy: parseInt(stats.karmic),
+                food: parseInt(stats.food),
+                coins: parseInt(stats.coins),
+                location: stats.location,
               })
             }
             break
@@ -182,10 +182,10 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
               const stats = response.data.stats
 
               updateFamiliar(familiar.id, {
-                karmicEnergy: familiar.karmicEnergy - 10,
-                coins: familiar.coins + 9,
-                food: familiar.food + 9,
-                location: 'Karmic Wellspring',
+                karmicEnergy: parseInt(stats.karmic),
+                food: parseInt(stats.food),
+                coins: parseInt(stats.coins),
+                location: stats.location,
               })
             }
             break
@@ -211,10 +211,10 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
               const response = await data.json()
               const stats = response.data.stats
               updateFamiliar(familiar.id, {
-                karmicEnergy: familiar.karmicEnergy - 20,
-                coins: familiar.coins + 19,
-                food: familiar.food + 19,
-                location: 'Karmic Wellspring',
+                karmicEnergy: parseInt(stats.karmic),
+                food: parseInt(stats.food),
+                coins: parseInt(stats.coins),
+                location: stats.location,
               })
             }
             break
@@ -253,11 +253,10 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
 
               const response = await data.json()
               const stats = response.data.stats
-
               updateFamiliar(familiar.id, {
-                coins: familiar.coins - 1,
-                food: familiar.food + 1,
-                location: 'Marketplace',
+                food: parseInt(stats.food),
+                coins: parseInt(stats.coins),
+                location: stats.location,
               })
             }
             break

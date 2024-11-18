@@ -1,6 +1,7 @@
 'use client'
 
 import {create} from 'zustand'
+import {getGifFileName} from './utils'
 
 type Message = {
   id: string
@@ -32,6 +33,7 @@ export interface FamiliarData {
   imageUrl: string
   address: string
   tokenId: number
+  item: number
 }
 
 interface FamiliarStore {
@@ -132,6 +134,7 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
       })
       const data = await response.json()
       if (response.ok && data) {
+        console.log(data.data)
         const familiars = data.data.map((familiar: any) => ({
           id: familiar.name.toString().toLowerCase(),
           name: familiar.name,
@@ -141,9 +144,13 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
           karmicEnergy: parseInt(familiar.karmic),
           location: familiar.location,
           story: familiar.story,
-          imageUrl: familiar.imageUrl,
+          imageUrl:
+            familiar.equipments.head === '0'
+              ? familiar.imageUrl
+              : `/images/${getGifFileName(familiar.name.toString().toLowerCase())}`,
           address: familiar.address,
           tokenId: familiar.tokenId,
+          item: parseInt(familiar.equipments.head),
         }))
         set({familiars: familiars})
       } else {
