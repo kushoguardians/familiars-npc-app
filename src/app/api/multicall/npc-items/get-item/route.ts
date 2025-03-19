@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       args: [account, id],
     })
 
-    let serializedBalance = serializeBigInt(balance)
+    const serializedBalance = serializeBigInt(balance)
 
     return NextResponse.json({data: serializedBalance}, {status: 200})
   } catch (error) {

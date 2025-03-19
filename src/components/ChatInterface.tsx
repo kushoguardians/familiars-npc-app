@@ -114,7 +114,7 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
               break
             }
 
-            let data = await fetch('/api/multicall/npc-actions/go-to-location', {
+            const data = await fetch('/api/multicall/npc-actions/go-to-location', {
               method: 'post',
               body: JSON.stringify({tokenId: familiar.tokenId, locationId: 1}),
             })
@@ -141,7 +141,7 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
 
               const locResponse = await locData.json()
               const locStats = locResponse.data.stats
-
+              console.log(locStats)
               const data = await fetch('/api/multicall/npc-actions/exchange-karmic', {
                 method: 'post',
                 body: JSON.stringify({tokenId: familiar.tokenId, karmicEnergyAmt: 5}),
@@ -172,7 +172,7 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
 
               const locResponse = await locData.json()
               const locStats = locResponse.data.stats
-
+              console.log(locStats)
               const data = await fetch('/api/multicall/npc-actions/exchange-karmic', {
                 method: 'post',
                 body: JSON.stringify({tokenId: familiar.tokenId, karmicEnergyAmt: 10}),
@@ -202,7 +202,7 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
 
               const locResponse = await locData.json()
               const locStats = locResponse.data.stats
-
+              console.log(locStats)
               const data = await fetch('/api/multicall/npc-actions/exchange-karmic', {
                 method: 'post',
                 body: JSON.stringify({tokenId: familiar.tokenId, karmicEnergyAmt: 20}),
@@ -245,7 +245,7 @@ const ChatInterface = ({familiar}: {familiar: FamiliarData}) => {
 
               const locResponse = await locData.json()
               const locStats = locResponse.data.stats
-
+              console.log(locStats)
               const data = await fetch('/api/multicall/npc-actions/buy-food', {
                 method: 'post',
                 body: JSON.stringify({tokenId: familiar.tokenId, coinsAmt: 1}),

@@ -1,4 +1,4 @@
-import {Send, X} from 'lucide-react'
+import {Send} from 'lucide-react'
 import {ChangeEvent, useRef} from 'react'
 
 import {cn} from '@/lib/utils'
@@ -33,7 +33,7 @@ const ChatInput = ({onChange, value, onSubmit, disabled}: Props) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault()
-
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 if (e.shiftKey) onChange({target: {value: `${value}\n`}} as any)
                 else formRef.current?.requestSubmit()
 
@@ -45,8 +45,7 @@ const ChatInput = ({onChange, value, onSubmit, disabled}: Props) => {
         <Button
           className={cn('gap-2', disabled && 'bg-neutral-300')}
           type="submit"
-          disabled={disabled}
-        >
+          disabled={disabled}>
           Send <Send className="h-3 w-3" />
         </Button>
       </div>

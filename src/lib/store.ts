@@ -19,7 +19,7 @@ type MessageState = {
   clearMessages: () => void
 }
 
-type FamiliarType = 'duwende' | 'adarna' | 'sundo' | 'diwata'
+// type FamiliarType = 'duwende' | 'adarna' | 'sundo' | 'diwata'
 
 export interface FamiliarData {
   id: string
@@ -55,6 +55,7 @@ export const useMessages = create<MessageState>((set, get) => ({
       const data = await response.json()
 
       if (response.ok && data.success) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const conversations = await data.conversations.map((chat: any) => ({
           id: chat._id,
           from: chat.from,
@@ -135,6 +136,7 @@ export const useFamiliarStore = create<FamiliarStore>((set, get) => ({
       const data = await response.json()
       if (response.ok && data) {
         console.log(data.data)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const familiars = data.data.map((familiar: any) => ({
           id: familiar.name.toString().toLowerCase(),
           name: familiar.name,

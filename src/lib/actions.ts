@@ -58,6 +58,7 @@ export const availableFunctions = [
 ]
 
 export const getHumanReadableAction = (actionToTake: string, aiResponse: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const actionTemplates: any = {
     goToGatheringArea: "Okay. I'm going now to the gathering area to collect some karmic energies.",
     goToHome: "I'm heading back home to rest and recuperate.",

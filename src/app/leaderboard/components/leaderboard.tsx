@@ -1,5 +1,5 @@
 'use client'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback} from 'react'
 
 type Guardian = {
   health: number
@@ -71,7 +71,7 @@ function Leaderboard({data}: {data: Guardian[]}) {
             <button
               key={criteria}
               onClick={() => setSortCriteria(criteria)}
-              className={`rounded-lg px-4 py-2 transition-colors text-sm ${
+              className={`rounded-lg px-4 py-2 text-sm transition-colors ${
                 sortCriteria === criteria
                   ? 'bg-indigo-600 text-white'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'

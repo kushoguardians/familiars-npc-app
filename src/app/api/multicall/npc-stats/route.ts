@@ -27,9 +27,9 @@ const FamiliarsContract: OperatorContractType = {
   abi: FamiliarsAbi as Abi,
 } as const
 
-interface RequestBody {
-  tokenIds: number[]
-}
+// interface RequestBody {
+//   tokenIds: number[]
+// }
 
 const getNPCName = (tokenId: number): string => {
   const names: {[key: number]: string} = {
@@ -74,11 +74,11 @@ export async function POST(request: Request) {
 
     const tbaAddressesResults = await publicClient.multicall({
       contracts: multicallPayload2,
-    }) 
+    })
 
     const metadataResults = await publicClient.multicall({
       contracts: multicallPayload3,
-    }) 
+    })
 
     const metadataObjects = await Promise.all(
       metadataResults.map(async (metadataResult) => {
@@ -119,7 +119,7 @@ export async function POST(request: Request) {
             tokenId: tokenIds[index],
             address: tbaAddress,
             story: metadata.description,
-            imageUrl: metadata.image
+            imageUrl: metadata.image,
           }
         }
         return null

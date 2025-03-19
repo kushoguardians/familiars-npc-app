@@ -11,11 +11,11 @@ export function formatDate(date: Date) {
   return format(new Date(date), ' - dd/MM/yy HH:mm')
 }
 
-export function toTitleCase(str: String) {
+export function toTitleCase(str: string) {
   return str
     .toLowerCase()
     .split(' ')
-    .map((word: String) => {
+    .map((word: string) => {
       return word.charAt(0).toUpperCase() + word.slice(1)
     })
     .join(' ')
@@ -31,9 +31,12 @@ export const extractTextFromCodeBlock = (child: CodeBlockChild): string => {
   if (typeof child === 'string') {
     return child
   } else if (child?.props?.children) {
-    return Children.toArray(child.props.children)
-      .map((nestedChild: any) => extractTextFromCodeBlock(nestedChild))
-      .join('')
+    return (
+      Children.toArray(child.props.children)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((nestedChild: any) => extractTextFromCodeBlock(nestedChild))
+        .join('')
+    )
   } else {
     return ''
   }

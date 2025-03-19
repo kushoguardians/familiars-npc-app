@@ -19,6 +19,7 @@ function CopyButton({content}: {content: React.ReactNode}) {
 
   const handleCopyClick = () => {
     const codeText = Children.toArray(content)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((child: any) => extractTextFromCodeBlock(child))
       .join('')
 
@@ -38,8 +39,7 @@ function CopyButton({content}: {content: React.ReactNode}) {
       ) : (
         <div
           className="flex cursor-pointer items-center gap-1 text-sm hover:opacity-70"
-          onClick={handleCopyClick}
-        >
+          onClick={handleCopyClick}>
           Copy <Copy size={15} />
         </div>
       )}
@@ -52,6 +52,7 @@ function DownloadButton({mimeType, content}: {mimeType: string; content: React.R
 
   const handleDownloadClick = () => {
     const codeText = Children.toArray(content)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((child: any) => extractTextFromCodeBlock(child))
       .join('')
 
@@ -77,8 +78,7 @@ function DownloadButton({mimeType, content}: {mimeType: string; content: React.R
       ) : (
         <div
           className="flex cursor-pointer items-center gap-1 text-sm hover:opacity-70"
-          onClick={handleDownloadClick}
-        >
+          onClick={handleDownloadClick}>
           Download <Download size={15} />
         </div>
       )}
@@ -104,7 +104,7 @@ function getMimeTypeFromClassName(className: string) {
   const mimeType = className.split('language-')[1]
   return mimeType || 'txt'
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Pre = ({children}: any) => {
   const mimeType = getMimeTypeFromClassName(children.props.className)
 
@@ -115,7 +115,7 @@ const Pre = ({children}: any) => {
     </pre>
   )
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const BlockQuote = ({children, ...props}: any) => {
   return (
     <blockquote {...props} className="my-2 border-l-2 border-neutral-600 bg-neutral-800 p-2">
@@ -129,10 +129,9 @@ const MessageBalloon = ({sender, message, date}: MessageBalloonProps) => {
     <div
       className={cn(
         'flex max-w-[87vw] flex-col gap-2 rounded-md p-4',
-        sender === 'USER' && ' bg-slate-500 dark:bg-slate-800',
-        sender === 'AI' && ' bg-slate-400 dark:bg-slate-600'
-      )}
-    >
+        sender === 'USER' && 'bg-slate-500 dark:bg-slate-800',
+        sender === 'AI' && 'bg-slate-400 dark:bg-slate-600'
+      )}>
       <Label className="text-xs font-semibold text-white">
         {sender === 'AI' ? 'Sundo' : 'Me'}
         {formatDate(date)}
@@ -140,11 +139,10 @@ const MessageBalloon = ({sender, message, date}: MessageBalloonProps) => {
       <Label className="text-base text-white">
         <Markdown
           components={{
-            pre: ({node, ...props}) => <Pre {...props} />,
-            blockquote: ({node, ...props}) => <BlockQuote {...props} />,
+            pre: ({...props}) => <Pre {...props} />,
+            blockquote: ({...props}) => <BlockQuote {...props} />,
           }}
-          rehypePlugins={[() => rehypeHighlight({detect: true})]}
-        >
+          rehypePlugins={[() => rehypeHighlight({detect: true})]}>
           {message}
         </Markdown>
       </Label>
