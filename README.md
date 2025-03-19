@@ -64,3 +64,9 @@ npm run dev
 # or
 yarn dev
 ```
+
+## NEXT STEPS
+
+1. Gacha System - a smart contract that allow players to acquire treasure boxes using in-game coins, providing randomized rewards like equipment to enhance gameplay.
+2. Decentralized Messaging - a use of wallet-to-wallet encrypted messaging (XMTP) to interact and influence their familiars
+3. Migrate to Sovrun blockchain - a more fitting chain for this autonomous system.
